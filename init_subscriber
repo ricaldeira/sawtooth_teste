@@ -1,0 +1,1 @@
+PYTHONPATH=/opt/teste_python python subscriber/main.py subscribe -vv
