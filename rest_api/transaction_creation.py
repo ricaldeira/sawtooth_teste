@@ -15,13 +15,15 @@
 
 import hashlib
 
-#from sawtooth_rest_api.protobuf import batch_pb2
-#from sawtooth_rest_api import protobuf
-#from sawtooth_rest_api.protobuf import transaction_pb2
+from sawtooth_rest_api.protobuf import batch_pb2
+from sawtooth_rest_api import protobuf
+from sawtooth_rest_api.protobuf import transaction_pb2
 
-#from simple_supply_addressing import addresser
-
-#from simple_supply_protobuf import payload_pb2
+from addressing import addresser
+# from addressing.addresser import get_agent_address
+# from addressing.addresser import get_address_type
+# from addressing.addresser import get_record_address
+from protobufs.protos import payload_pb2
 
 
 def make_create_agent_transaction(transaction_signer,
@@ -85,9 +87,9 @@ def make_create_record_transaction(transaction_signer,
     """
 
     inputs = [
-        addresser.get_agent_address(
+        get_agent_address(
             transaction_signer.get_public_key().as_hex()),
-        addresser.get_record_address(record_id)
+        get_record_address(record_id)
     ]
 
     outputs = [addresser.get_record_address(record_id)]

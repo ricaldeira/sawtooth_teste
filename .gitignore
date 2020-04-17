@@ -1,0 +1,3 @@
+*.pyo
+*.pyc
+node_modules/

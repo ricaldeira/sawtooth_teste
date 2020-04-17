@@ -13,8 +13,8 @@
 # limitations under the License.
 # ------------------------------------------------------------------------------
 
-# from protobuf import client_batch_submit_pb2
-# from protobuf import validator_pb2
+from sawtooth_rest_api.protobuf import client_batch_submit_pb2
+from sawtooth_rest_api.protobuf import validator_pb2
 
 from sawtooth_signing import create_context
 from sawtooth_signing import CryptoFactory
