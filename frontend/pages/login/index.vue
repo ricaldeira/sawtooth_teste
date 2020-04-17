@@ -6,11 +6,12 @@
       <AppControlInput v-model="agent.password">Password</AppControlInput>
 
       <AppButton type="button" style="margin-left: 10px" btn-style="save" @click="onSave">
-        Save
+        Login
       </AppButton>
       <AppButton type="button" style="margin-left: 10px" btn-style="save" @click="onAgents">
         Agents
       </AppButton>
+      
 
        
     </form>
@@ -38,8 +39,8 @@ export default {
       }
       this.$store.dispatch('agents/login', credentials)
         .then(() =>{
-          this.$router.push("/agents")
-          console.log("Logado")
+          console.log("Redirecionando..")
+          this.$router.push("/agents")          
         })
         .catch(e => console.log(e))
     }

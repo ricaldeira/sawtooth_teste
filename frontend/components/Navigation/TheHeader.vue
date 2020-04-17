@@ -6,7 +6,9 @@
         <li class="nav-item"><nuxt-link to="/posts">Blog</nuxt-link></li>
         <li class="nav-item"><nuxt-link to="/about">About</nuxt-link></li>
         <li class="nav-item"><nuxt-link to="/admin">Admin</nuxt-link></li>
-        <li class="nav-item"><nuxt-link to="/logout">Logout</nuxt-link></li>
+        <AppButton type="button" style="margin-left: 10px" btn-style="save" @click="onLogout">
+        Logout
+      </AppButton>
       </ul>
     </div>
   </header>
@@ -17,8 +19,19 @@
 
 export default {
   name: "TheHeader",
+  methods:{
+    onLogout(){
+      this.$store.dispatch('agents/logout')
+        .then(() =>{
+          this.$router.push("/login")          
+        })
+        .catch(e => console.log(e))
+    },
+
+  }
 };
 </script>
+
 
 
 <style scoped>

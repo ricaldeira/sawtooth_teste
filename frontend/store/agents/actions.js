@@ -38,7 +38,7 @@ export default {
         Cookie.set("tokenExpiration", expirationDate)
     },
     createAgent(context, agent){
-        this.$axios.$post("/api/agents", agent)
+        return this.$axios.$post("/api/agents", agent)
             .then(data => {
                 console.log("Getting authorization")
                 const token = data['authorization'];
@@ -84,13 +84,15 @@ export default {
     logout(vuexContext){
         vuexContext.commit("clearToken");
         Cookie.remove("jwt");
+        Cookie.remove("tokenExpiration");
         if (process.client){
             localStorage.removeItem("token")
+            localStorage.removeItem("tokenExpiration")
         }
     },
 
     login(context, credentials){
-        this.$axios.$post("/api/authentication", credentials)
+        return this.$axios.$post("/api/authentication", credentials)        
             .then(data => {
                 //gravaToken(data['authorization']);
                 //vuexContext.redirect("/agents")
