@@ -8,6 +8,9 @@
       <AppButton type="button" style="margin-left: 10px" btn-style="save" @click="onSave">
         Save
       </AppButton>
+      <AppButton type="button" style="margin-left: 10px" btn-style="save" @click="onAgents">
+        Agents
+      </AppButton>
 
        
     </form>
@@ -23,12 +26,22 @@ export default {
   components: {
     AppButton, AppControlInput
   },
+  // middleware: ["check-auth", "auth"],
   methods: {
+    onAgents(){
+      this.$router.push("/agents")
+    },
     onSave(agent){
-      this.$store.dispatch('agents/createAgent', this.agent)
+      const credentials = {
+        public_key: this.agent.name,
+        password: this.agent.password
+      }
+      this.$store.dispatch('agents/login', credentials)
         .then(() =>{
-          console.log("OK");
+          this.$router.push("/agents")
+          console.log("Logado")
         })
+        .catch(e => console.log(e))
     }
   },
   data(){

@@ -12,22 +12,31 @@ export default {
       { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css?family=Open+Sans"
+      }
     ]
   },
   /*
   ** Customize the progress-bar color
   */
-  loading: { color: '#fff' },
+ loading: { color: "#fa923f", height: "4px", duration: 5000 },
+ loadingIndicator: {
+   name: "circle",
+   color: "#fa923f"
+ },
   /*
   ** Global CSS
   */
-  css: [
-  ],
+ css: ["~assets/styles/main.css"],
   /*
   ** Plugins to load before mounting the App
   */
   plugins: [
+    "~/plugins/core-components.js"
+
   ],
   /*
   ** Nuxt.js dev-modules
@@ -76,5 +85,12 @@ export default {
     */
     extend (config, ctx) {
     }
+  },
+  env:{
+    validatorURL: process.env.VALIDATOR_URL || "http://192.168.0.14:4004"
+  },
+  transition:{
+    name: "fade",
+    mode: "out-in"
   }
 }

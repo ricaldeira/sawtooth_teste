@@ -87,9 +87,9 @@ def make_create_record_transaction(transaction_signer,
     """
 
     inputs = [
-        get_agent_address(
+        addresser.get_agent_address(
             transaction_signer.get_public_key().as_hex()),
-        get_record_address(record_id)
+        addresser.get_record_address(record_id)
     ]
 
     outputs = [addresser.get_record_address(record_id)]

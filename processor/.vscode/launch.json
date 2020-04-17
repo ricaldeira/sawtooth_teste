@@ -6,13 +6,13 @@
     "configurations": [
     
         {
-            "name": "Rest-API Python",
+            "name": "Processor",
             "type": "python",
             "request": "launch",
-            "env": {"PYTHONPATH": "${workspaceRoot}"},
-            "program": "${workspaceFolder}/rest_api/main.py",
+            "env": {"PYTHONPATH": "/opt/teste_python"},
+            "program": "main.py",
             "console": "integratedTerminal",            
-            "args": ["--db-host", "192.168.0.14", "-C", "tcp://192.168.0.14:4004", "-vv"]            
+            "args": ["-C", "tcp://192.168.0.14:4004"]
         }
     ]
 }
