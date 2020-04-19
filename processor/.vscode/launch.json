@@ -12,7 +12,7 @@
             "env": {"PYTHONPATH": "/opt/teste_python"},
             "program": "main.py",
             "console": "integratedTerminal",            
-            "args": ["-C", "tcp://192.168.0.14:4004"]
+            "args": ["-C", "tcp://192.168.0.14:4004", "-vv"]
         }
     ]
 }

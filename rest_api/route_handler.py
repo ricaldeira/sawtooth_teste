@@ -22,7 +22,6 @@ import bcrypt
 from Crypto.Cipher import AES
 from itsdangerous import BadSignature
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
-
 from errors import ApiBadRequest
 from errors import ApiNotFound
 from errors import ApiUnauthorized
@@ -182,6 +181,28 @@ class RouteHandler(object):
         return decrypt_private_key(request.app['aes_key'],
                                    public_key,
                                    auth_resource['encrypted_private_key'])
+
+    async def list_documents(self, _request):
+        doc_list = await self._database.fetch_all_document_resources()
+        return json_response(doc_list)
+
+    async def create_document(self, request):
+        private_key = await self._authorize(request)
+        data =  await request.post()
+        nome_arquivo = data['file'].filename
+        arquivo = data['file'].file
+        content_type = data['file'].content_type
+        document = arquivo.read()    
+   
+        
+        await self._messenger.send_create_document_transaction(
+            private_key=private_key,            
+            document=document,
+            timestamp=get_time())
+
+        return json_response(
+            {'data': 'Create document transaction submitted'})
+
 
 
 async def decode_request(request):

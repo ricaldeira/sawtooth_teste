@@ -22,6 +22,8 @@ message SimpleSupplyPayload{
         CREATE_RECORD = 1;
         UPDATE_RECORD = 2;
         TRANSFER_RECORD = 3;
+        CREATE_DOCUMENT = 4;
+        VALIDATE_DOCUMENT = 5;
     }
 
     // Whether the payload contains a create agent, create record,
@@ -33,10 +35,12 @@ message SimpleSupplyPayload{
     CreateAgentAction create_agent = 2;
     CreateRecordAction create_record = 3;
     UpdateRecordAction update_record = 4;
-    TransferRecordAction transfer_record = 5;
-
+    TransferRecordAction transfer_record = 5;    
     // Approximately when transaction was submitted, as a Unix UTC timestamp
     uint64 timestamp = 6;
+
+    CreateDocumentAction create_document = 7;
+    ValidateDocumentAction validate_documento =8;
 }
 
 
@@ -73,4 +77,13 @@ message TransferRecordAction {
 
     // The public key of the agent to which the record will be transferred
     string receiving_agent = 2;
+}
+
+message CreateDocumentAction {
+    string document_id =1;
+    
+}
+
+message ValidateDocumentAction {
+    string document_id = 1;
 }

@@ -1,15 +1,17 @@
 <template>
     
       <div class="section">
-        <form @submit.prevent="onSave">
+        <form @submit.prevent="">
 
           <AppControlInput v-model="agent.name">Agent Public Key</AppControlInput>
           <AppControlInput type="password" v-model="agent.password">Password</AppControlInput>
 
           <AppButton type="button" style="margin-left: 10px" btn-style="save" @click="onSave">
             Login
-          </AppButton>
-          
+          </AppButton>          
+          <AppButton type="button" style="margin-left: 10px" btn-style="save" @click="onSignUp">
+            Create Agent
+          </AppButton>          
         </form>
         </div> 
     
@@ -41,13 +43,20 @@ export default {
           this.$router.push("/agents")          
         })
         .catch(e => console.log(e))
+    },
+    onSignUp(){
+      this.$store.dispatch('agents/createAgent', this.agent)
+        .then(res => {
+          console.log("fazendo login", res.data)
+          this.$router.push('/agents')
+        })
     }
   },
   data(){
      return {
        agent: {
-           name: "025cd0b750de14b3bed2aea51b1c5bc3281808bf9ee1ada3462a025bdcec44619b",
-           password: "321"
+           name: "032eefbd90cf19087a985b2f4c7434f117bd852331f46b1584421b5a78ad8ff665",
+           password: "123"
         }
      }
   }

@@ -202,6 +202,45 @@ def make_update_record_transaction(transaction_signer,
         transaction_signer=transaction_signer,
         batch_signer=batch_signer)
 
+def make_create_document_transaction(transaction_signer,
+                                   batch_signer,                                   
+                                   document,
+                                   timestamp):
+    """Make a CreateDocumentAction transaction and wrap it in a batch
+
+    Args:
+        transaction_signer (sawtooth_signing.Signer): The transaction key pair
+        batch_signer (sawtooth_signing.Signer): The batch key pair        
+        document_id (str): Unique ID of the record
+        timestamp (int): Unix UTC timestamp of when the agent is created
+
+    Returns:
+        batch_pb2.Batch: The transaction wrapped in a batch
+    """
+    hash_documento = addresser.get_document_address(document)                  
+    inputs = [
+        addresser.get_agent_address(
+            transaction_signer.get_public_key().as_hex()),
+        hash_documento
+    ]
+
+    outputs = [hash_documento]
+
+    action = payload_pb2.CreateDocumentAction(
+        document_id=hash_documento)
+
+    payload = payload_pb2.SimpleSupplyPayload(
+        action=payload_pb2.SimpleSupplyPayload.CREATE_DOCUMENT,
+        create_document=action,
+        timestamp=timestamp)
+    payload_bytes = payload.SerializeToString()
+
+    return _make_batch(
+        payload_bytes=payload_bytes,
+        inputs=inputs,
+        outputs=outputs,
+        transaction_signer=transaction_signer,
+        batch_signer=batch_signer)
 
 def _make_batch(payload_bytes,
                 inputs,

@@ -50,6 +50,10 @@ class SimpleSupplyPayload(object):
                 payload_pb2.SimpleSupplyPayload.UPDATE_RECORD:
             return self._transaction.update_record
 
+        if self._transaction.HasField('create_document') and \
+            self._transaction.action == payload_pb2.SimpleSupplyPayload.CREATE_DOCUMENT:
+            return self._transaction.create_document
+
         raise InvalidTransaction('Action does not match payload data')
 
     @property

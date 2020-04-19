@@ -15,20 +15,21 @@
 
 import enum
 import hashlib
-
+from io import BytesIO
 
 FAMILY_NAME = 'docs_blocks'
 FAMILY_VERSION = '0.1'
 NAMESPACE = hashlib.sha512(FAMILY_NAME.encode('utf-8')).hexdigest()[:6]
 AGENT_PREFIX = '00'
 RECORD_PREFIX = '01'
+DOCUMENT_PREFIX = '02'
 
 
 @enum.unique
 class AddressSpace(enum.IntEnum):
     AGENT = 0
     RECORD = 1
-
+    DOCUMENT = 2
     OTHER_FAMILY = 100
 
 
@@ -54,3 +55,18 @@ def get_address_type(address):
         return AddressSpace.RECORD
 
     return AddressSpace.OTHER_FAMILY
+
+def get_document_address(document):
+    # separar em blocos para não ocupar memória 
+    # inteira com arquivos grandes
+    BLOCK_SIZE = 65536*2
+    file_hash = hashlib.sha512()
+    
+    with BytesIO(document) as f:
+        fb = f.read(BLOCK_SIZE)
+
+        while len(fb) > 0:
+            file_hash.update(fb)
+            fb = f.read(BLOCK_SIZE)
+    
+    return NAMESPACE + AGENT_PREFIX + file_hash.hexdigest()[:62]

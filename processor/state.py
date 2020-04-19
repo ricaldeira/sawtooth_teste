@@ -17,6 +17,7 @@ from addressing import addresser
 
 from protobufs.protos import agent_pb2
 from protobufs.protos import record_pb2
+from protobufs.protos import document_pb2
 
 
 class SimpleSupplyState(object):
@@ -163,6 +164,30 @@ class SimpleSupplyState(object):
                 if record.record_id == record_id:
                     record.locations.extend([location])
         data = container.SerializeToString()
+        updated_state = {}
+        updated_state[address] = data
+        self._context.set_state(updated_state, timeout=self._timeout)
+    
+    def set_document(self, public_key, document_hash, timestamp):
+        
+        owner = document_pb2.Document.Owner(
+            agent_id=public_key,
+            timestamp=timestamp)
+        
+        document = document_pb2.Document(
+            document_id=document_hash,
+            owners=[owner])
+
+        container = agent_pb2.AgentContainer()
+
+        state_entries = self._context.get_state(
+            addresses=[document_hash], timeout=self._timeout)
+        if state_entries:
+            container.ParseFromString(state_entries[0].data)
+
+        container.entries.extend([document])
+        data = container.SerializeToString()
+
         updated_state = {}
         updated_state[address] = data
         self._context.set_state(updated_state, timeout=self._timeout)

@@ -104,6 +104,9 @@ def start_rest_api(host, port, messenger, database):
         '/records/{record_id}/transfer', handler.transfer_record)
     app.router.add_post('/records/{record_id}/update', handler.update_record)
 
+    app.router.add_get('/documents', handler.list_documents)
+    app.router.add_post('/documents', handler.create_document)
+
     LOGGER.info('Starting Simple Supply REST API on %s:%s', host, port)
     web.run_app(
         app,

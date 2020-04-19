@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+message Document{
+    message Owner {
+        //agent  public key
+        string agent_id = 1;
+        uint64 timestamp = 2;
+    }
+    string document_hash = 1;    
+    bool document_valid = 2;
+    repeated Owner owners = 3;
+}
+
+message DocumentContainer {
+    repeated Document entries = 1;
+}

@@ -12,11 +12,13 @@ from addressing.addresser import get_address_type
 # from protobufs.agent_pb2 import AgentContainer
 from protobufs.protos.record_pb2 import RecordContainer
 from protobufs.protos.agent_pb2 import AgentContainer
+from protobufs.protos.document_pb2 import DocumentContainer
 
 
 CONTAINERS = {
     AddressSpace.AGENT: AgentContainer,
-    AddressSpace.RECORD: RecordContainer
+    AddressSpace.RECORD: RecordContainer,
+    AddressSpace.DOCUMENT : DocumentContainer
 }
 
 

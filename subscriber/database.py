@@ -85,8 +85,29 @@ CREATE TABLE IF NOT EXISTS agents (
     end_block_num    bigint
 );
 """
+CREATE_DOCUMENT_STMTS = """
+CREATE TABLE IF NOT EXISTS documents (
+    id               bigserial PRIMARY KEY,
+    public_key       varchar,
+    description      varchar,
+    hash_code        varchar,
+    document         bytea, 
+    timestamp        bigint,
+    start_block_num  bigint,
+    end_block_num    bigint
+)
+"""
 
-
+CREATE_DOCUMENT_OWNER_STMTS = """
+CREATE TABLE IF NOT EXISTS document_owners(
+    id               bigserial PRIMARY KEY,
+    document_id      varchar,
+    agent_id         varchar,
+    timestamp        bigint,
+    start_block_num  bigint,
+    end_block_num    bigint
+)
+"""
 class Database(object):
     """Simple object for managing a connection to a postgres database
     """
@@ -144,6 +165,12 @@ class Database(object):
             LOGGER.debug('Creating table: agents')
             cursor.execute(CREATE_AGENT_STMTS)
 
+            LOGGER.debug('Creating table: documents')
+            cursor.execute(CREATE_DOCUMENT_STMTS)
+            
+            LOGGER.debug('Creating table: document_owners')
+            cursor.execute(CREATE_DOCUMENT_OWNER_STMTS)
+
         self._conn.commit()
 
     def disconnect(self):
@@ -185,6 +212,17 @@ class Database(object):
         UPDATE records SET end_block_num = null
         WHERE end_block_num >= {}
         """.format(block_num)
+        delete_document_owners = """
+        DELETE FROM document_owners WHERE document_id =
+        (SELECT document_id FROM documents WHERE start_block_num >= {})
+        """.format(block_num)
+        delete_documents = """
+        DELETE FROM documents WHERE start_block_num >= {}
+        """.format(block_num)
+        update_documents = """
+        UPDATE documents SET end_block_num = null
+        WHERE end_block_num >= {}
+        """.format(block_num)        
 
         delete_blocks = """
         DELETE FROM blocks WHERE block_num >= {}
@@ -197,6 +235,10 @@ class Database(object):
             cursor.execute(delete_record_owners)
             cursor.execute(delete_records)
             cursor.execute(update_records)
+            cursor.execute(delete_document_owners)
+            cursor.execute(delete_documents)
+            cursor.execute(update_documents)
+
             cursor.execute(delete_blocks)
 
     def fetch_last_known_blocks(self, count):
@@ -356,3 +398,59 @@ class Database(object):
             cursor.execute(update_record_owners)
             for insert in insert_record_owners:
                 cursor.execute(insert)
+    
+    def insert_document(self, record_dict):
+        update_document = """
+        UPDATE documents SET end_block_num = {}
+        WHERE end_block_num = {} AND document_id = '{}'
+        """.format(
+            record_dict['start_block_num'],
+            record_dict['end_block_num'],
+            record_dict['document_id'])
+
+        insert_document = """
+        INSERT INTO documents (
+        document_id,
+        start_block_num,
+        end_block_num)
+        VALUES ('{}', '{}', '{}');
+        """.format(
+            record_dict['document_id'],
+            record_dict['start_block_num'],
+            record_dict['end_block_num'])
+
+        with self._conn.cursor() as cursor:
+            cursor.execute(update_document)
+            cursor.execute(insert_document)
+        self._insert_document_owners(record_dict)
+
+    def _insert_document_owners(self, record_dict):
+        update_document_owners = """
+        UPDATE document_owners SET end_block_num = {}
+        WHERE end_block_num = {} AND document_id = '{}'
+        """.format(
+            record_dict['start_block_num'],
+            record_dict['end_block_num'],
+            record_dict['document_id'])
+
+        insert_document_owners = [
+            """
+            INSERT INTO document_owners (
+            document_id,
+            agent_id,
+            timestamp,
+            start_block_num,
+            end_block_num)
+            VALUES ('{}', '{}', '{}', '{}', '{}');
+            """.format(
+                record_dict['document_id'],
+                owner['agent_id'],
+                owner['timestamp'],
+                record_dict['start_block_num'],
+                record_dict['end_block_num'])
+            for owner in record_dict['owners']
+        ]
+        with self._conn.cursor() as cursor:
+            cursor.execute(update_document_owners)
+            for insert in insert_document_owners:
+                cursor.execute(insert)        

@@ -198,3 +198,31 @@ class Database(object):
                 return records
             except TypeError:
                 return []
+
+    async def fetch_all_document_resources(self):
+        fetch_documents = """
+        SELECT id FROM documents
+        WHERE ({0}) >= start_block_num
+        AND ({0}) < end_block_num;
+        """.format(LATEST_BLOCK_NUM)
+
+        async with self._conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            try:
+                await cursor.execute(fetch_documents)
+                documents = await cursor.fetchall()
+
+                for document in documents:
+                    fetch_document_owners = """
+                    SELECT agent_id, timestamp
+                    FROM document_owners
+                    WHERE document_id='{0}'
+                    AND ({1}) >= start_block_num
+                    AND ({1}) < end_block_num;
+                    """.format(document['document_id'], LATEST_BLOCK_NUM)
+
+                    await cursor.execute(fetch_document_owners)
+                    document['owners'] = await cursor.fetchall()
+
+                return documents
+            except TypeError:
+                return []        

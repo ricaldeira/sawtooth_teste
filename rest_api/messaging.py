@@ -20,14 +20,14 @@ from sawtooth_signing import create_context
 from sawtooth_signing import CryptoFactory
 from sawtooth_signing import secp256k1
 from sawtooth_rest_api.messaging import Connection
-
+import hashlib
 from errors import ApiBadRequest
 from errors import ApiInternalError
 from transaction_creation import make_create_agent_transaction
 from transaction_creation import make_create_record_transaction
 from transaction_creation import make_transfer_record_transaction
 from transaction_creation import make_update_record_transaction
-
+from transaction_creation import make_create_document_transaction
 
 class Messenger(object):
     def __init__(self, validator_url):
@@ -77,6 +77,20 @@ class Messenger(object):
             latitude=latitude,
             longitude=longitude,
             record_id=record_id,
+            timestamp=timestamp)
+        await self._send_and_wait_for_commit(batch)
+
+    async def send_create_document_transaction(self,
+                                             private_key,                                             
+                                             document,
+                                             timestamp):
+        transaction_signer = self._crypto_factory.new_signer(
+            secp256k1.Secp256k1PrivateKey.from_hex(private_key))
+
+        batch = make_create_document_transaction(
+            transaction_signer=transaction_signer,
+            batch_signer=self._batch_signer,
+            document=document,            
             timestamp=timestamp)
         await self._send_and_wait_for_commit(batch)
 

@@ -18,7 +18,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=b'\n\x14protos/payload.proto\"\xde\x02\n\x13SimpleSupplyPayload\x12+\n\x06\x61\x63tion\x18\x01 \x01(\x0e\x32\x1b.SimpleSupplyPayload.Action\x12(\n\x0c\x63reate_agent\x18\x02 \x01(\x0b\x32\x12.CreateAgentAction\x12*\n\rcreate_record\x18\x03 \x01(\x0b\x32\x13.CreateRecordAction\x12*\n\rupdate_record\x18\x04 \x01(\x0b\x32\x13.UpdateRecordAction\x12.\n\x0ftransfer_record\x18\x05 \x01(\x0b\x32\x15.TransferRecordAction\x12\x11\n\ttimestamp\x18\x06 \x01(\x04\"U\n\x06\x41\x63tion\x12\x10\n\x0c\x43REATE_AGENT\x10\x00\x12\x11\n\rCREATE_RECORD\x10\x01\x12\x11\n\rUPDATE_RECORD\x10\x02\x12\x13\n\x0fTRANSFER_RECORD\x10\x03\"!\n\x11\x43reateAgentAction\x12\x0c\n\x04name\x18\x01 \x01(\t\"L\n\x12\x43reateRecordAction\x12\x11\n\trecord_id\x18\x01 \x01(\t\x12\x10\n\x08latitude\x18\x02 \x01(\x12\x12\x11\n\tlongitude\x18\x03 \x01(\x12\"L\n\x12UpdateRecordAction\x12\x11\n\trecord_id\x18\x01 \x01(\t\x12\x10\n\x08latitude\x18\x02 \x01(\x12\x12\x11\n\tlongitude\x18\x03 \x01(\x12\"B\n\x14TransferRecordAction\x12\x11\n\trecord_id\x18\x01 \x01(\t\x12\x17\n\x0freceiving_agent\x18\x02 \x01(\tb\x06proto3'
+  serialized_pb=b'\n\x14protos/payload.proto\"\xf0\x03\n\x13SimpleSupplyPayload\x12+\n\x06\x61\x63tion\x18\x01 \x01(\x0e\x32\x1b.SimpleSupplyPayload.Action\x12(\n\x0c\x63reate_agent\x18\x02 \x01(\x0b\x32\x12.CreateAgentAction\x12*\n\rcreate_record\x18\x03 \x01(\x0b\x32\x13.CreateRecordAction\x12*\n\rupdate_record\x18\x04 \x01(\x0b\x32\x13.UpdateRecordAction\x12.\n\x0ftransfer_record\x18\x05 \x01(\x0b\x32\x15.TransferRecordAction\x12\x11\n\ttimestamp\x18\x06 \x01(\x04\x12.\n\x0f\x63reate_document\x18\x07 \x01(\x0b\x32\x15.CreateDocumentAction\x12\x33\n\x12validate_documento\x18\x08 \x01(\x0b\x32\x17.ValidateDocumentAction\"\x81\x01\n\x06\x41\x63tion\x12\x10\n\x0c\x43REATE_AGENT\x10\x00\x12\x11\n\rCREATE_RECORD\x10\x01\x12\x11\n\rUPDATE_RECORD\x10\x02\x12\x13\n\x0fTRANSFER_RECORD\x10\x03\x12\x13\n\x0f\x43REATE_DOCUMENT\x10\x04\x12\x15\n\x11VALIDATE_DOCUMENT\x10\x05\"!\n\x11\x43reateAgentAction\x12\x0c\n\x04name\x18\x01 \x01(\t\"L\n\x12\x43reateRecordAction\x12\x11\n\trecord_id\x18\x01 \x01(\t\x12\x10\n\x08latitude\x18\x02 \x01(\x12\x12\x11\n\tlongitude\x18\x03 \x01(\x12\"L\n\x12UpdateRecordAction\x12\x11\n\trecord_id\x18\x01 \x01(\t\x12\x10\n\x08latitude\x18\x02 \x01(\x12\x12\x11\n\tlongitude\x18\x03 \x01(\x12\"B\n\x14TransferRecordAction\x12\x11\n\trecord_id\x18\x01 \x01(\t\x12\x17\n\x0freceiving_agent\x18\x02 \x01(\t\"+\n\x14\x43reateDocumentAction\x12\x13\n\x0b\x64ocument_id\x18\x01 \x01(\t\"-\n\x16ValidateDocumentAction\x12\x13\n\x0b\x64ocument_id\x18\x01 \x01(\tb\x06proto3'
 )
 
 
@@ -45,11 +45,19 @@ _SIMPLESUPPLYPAYLOAD_ACTION = _descriptor.EnumDescriptor(
       name='TRANSFER_RECORD', index=3, number=3,
       serialized_options=None,
       type=None),
+    _descriptor.EnumValueDescriptor(
+      name='CREATE_DOCUMENT', index=4, number=4,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='VALIDATE_DOCUMENT', index=5, number=5,
+      serialized_options=None,
+      type=None),
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=290,
-  serialized_end=375,
+  serialized_start=392,
+  serialized_end=521,
 )
 _sym_db.RegisterEnumDescriptor(_SIMPLESUPPLYPAYLOAD_ACTION)
 
@@ -103,6 +111,20 @@ _SIMPLESUPPLYPAYLOAD = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='create_document', full_name='SimpleSupplyPayload.create_document', index=6,
+      number=7, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='validate_documento', full_name='SimpleSupplyPayload.validate_documento', index=7,
+      number=8, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -117,7 +139,7 @@ _SIMPLESUPPLYPAYLOAD = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=25,
-  serialized_end=375,
+  serialized_end=521,
 )
 
 
@@ -147,8 +169,8 @@ _CREATEAGENTACTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=377,
-  serialized_end=410,
+  serialized_start=523,
+  serialized_end=556,
 )
 
 
@@ -192,8 +214,8 @@ _CREATERECORDACTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=412,
-  serialized_end=488,
+  serialized_start=558,
+  serialized_end=634,
 )
 
 
@@ -237,8 +259,8 @@ _UPDATERECORDACTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=490,
-  serialized_end=566,
+  serialized_start=636,
+  serialized_end=712,
 )
 
 
@@ -275,8 +297,70 @@ _TRANSFERRECORDACTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=568,
-  serialized_end=634,
+  serialized_start=714,
+  serialized_end=780,
+)
+
+
+_CREATEDOCUMENTACTION = _descriptor.Descriptor(
+  name='CreateDocumentAction',
+  full_name='CreateDocumentAction',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='document_id', full_name='CreateDocumentAction.document_id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=782,
+  serialized_end=825,
+)
+
+
+_VALIDATEDOCUMENTACTION = _descriptor.Descriptor(
+  name='ValidateDocumentAction',
+  full_name='ValidateDocumentAction',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='document_id', full_name='ValidateDocumentAction.document_id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=827,
+  serialized_end=872,
 )
 
 _SIMPLESUPPLYPAYLOAD.fields_by_name['action'].enum_type = _SIMPLESUPPLYPAYLOAD_ACTION
@@ -284,12 +368,16 @@ _SIMPLESUPPLYPAYLOAD.fields_by_name['create_agent'].message_type = _CREATEAGENTA
 _SIMPLESUPPLYPAYLOAD.fields_by_name['create_record'].message_type = _CREATERECORDACTION
 _SIMPLESUPPLYPAYLOAD.fields_by_name['update_record'].message_type = _UPDATERECORDACTION
 _SIMPLESUPPLYPAYLOAD.fields_by_name['transfer_record'].message_type = _TRANSFERRECORDACTION
+_SIMPLESUPPLYPAYLOAD.fields_by_name['create_document'].message_type = _CREATEDOCUMENTACTION
+_SIMPLESUPPLYPAYLOAD.fields_by_name['validate_documento'].message_type = _VALIDATEDOCUMENTACTION
 _SIMPLESUPPLYPAYLOAD_ACTION.containing_type = _SIMPLESUPPLYPAYLOAD
 DESCRIPTOR.message_types_by_name['SimpleSupplyPayload'] = _SIMPLESUPPLYPAYLOAD
 DESCRIPTOR.message_types_by_name['CreateAgentAction'] = _CREATEAGENTACTION
 DESCRIPTOR.message_types_by_name['CreateRecordAction'] = _CREATERECORDACTION
 DESCRIPTOR.message_types_by_name['UpdateRecordAction'] = _UPDATERECORDACTION
 DESCRIPTOR.message_types_by_name['TransferRecordAction'] = _TRANSFERRECORDACTION
+DESCRIPTOR.message_types_by_name['CreateDocumentAction'] = _CREATEDOCUMENTACTION
+DESCRIPTOR.message_types_by_name['ValidateDocumentAction'] = _VALIDATEDOCUMENTACTION
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 SimpleSupplyPayload = _reflection.GeneratedProtocolMessageType('SimpleSupplyPayload', (_message.Message,), {
@@ -326,6 +414,20 @@ TransferRecordAction = _reflection.GeneratedProtocolMessageType('TransferRecordA
   # @@protoc_insertion_point(class_scope:TransferRecordAction)
   })
 _sym_db.RegisterMessage(TransferRecordAction)
+
+CreateDocumentAction = _reflection.GeneratedProtocolMessageType('CreateDocumentAction', (_message.Message,), {
+  'DESCRIPTOR' : _CREATEDOCUMENTACTION,
+  '__module__' : 'protos.payload_pb2'
+  # @@protoc_insertion_point(class_scope:CreateDocumentAction)
+  })
+_sym_db.RegisterMessage(CreateDocumentAction)
+
+ValidateDocumentAction = _reflection.GeneratedProtocolMessageType('ValidateDocumentAction', (_message.Message,), {
+  'DESCRIPTOR' : _VALIDATEDOCUMENTACTION,
+  '__module__' : 'protos.payload_pb2'
+  # @@protoc_insertion_point(class_scope:ValidateDocumentAction)
+  })
+_sym_db.RegisterMessage(ValidateDocumentAction)
 
 
 # @@protoc_insertion_point(module_scope)

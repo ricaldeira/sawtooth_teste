@@ -73,6 +73,11 @@ class SimpleSupplyHandler(TransactionHandler):
                 state=state,
                 public_key=header.signer_public_key,
                 payload=payload)
+        elif payload.action == payload_pb2.SimpleSupplyPayload.CREATE_DOCUMENT:
+            _create_document(
+                state=state,
+                signer_public_key=header.signer_public_key,
+                payload=payload)
         else:
             raise InvalidTransaction('Unhandled action')
 
@@ -182,3 +187,15 @@ def _validate_timestamp(timestamp):
             'Timestamp must be less than local time.'
             ' Expected {0} in ({1}-{2}, {1}+{2})'.format(
                 timestamp, current_time, SYNC_TOLERANCE))
+
+def _create_document(state, signer_public_key, payload):
+    if state.get_agent(signer_public_key) is None:
+        raise InvalidTransaction('Agent with the public key {} does '
+                                 'not exist'.format(signer_public_key))
+    if payload.data.document_id is None:
+        raise InvalidTransaction('Hash do documento invalido ou vazio')
+    state.set_document(
+                    public_key=signer_public_key,
+                    document_hash=payload.data.document_id,
+                    timestamp=payload.timestamp)
+    print(state)
