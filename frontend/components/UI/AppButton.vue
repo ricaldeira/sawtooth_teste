@@ -21,7 +21,7 @@ export default {
 </script>
 
 <style scoped>
-    .button {
+    /* .button {
     font: inherit;
     background-color: black;
     color: white;
@@ -60,5 +60,5 @@ export default {
     background-color: salmon;
     border: 1px solid transparent;
     color: white;
-    }
+    } */
 </style>

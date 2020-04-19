@@ -1,22 +1,20 @@
 <template>
-  <div class="container">
-    <form @submit.prevent="onSave">
-
-      <AppControlInput v-model="agent.name">Agent Name</AppControlInput>
-      <AppControlInput v-model="agent.password">Password</AppControlInput>
-
-      <AppButton type="button" style="margin-left: 10px" btn-style="save" @click="onSave">
-        Login
-      </AppButton>
-      <AppButton type="button" style="margin-left: 10px" btn-style="save" @click="onAgents">
-        Agents
-      </AppButton>
-      
-
-       
-    </form>
     
-  </div>
+      <div class="section">
+        <form @submit.prevent="onSave">
+
+          <AppControlInput v-model="agent.name">Agent Public Key</AppControlInput>
+          <AppControlInput type="password" v-model="agent.password">Password</AppControlInput>
+
+          <AppButton type="button" style="margin-left: 10px" btn-style="save" @click="onSave">
+            Login
+          </AppButton>
+          
+        </form>
+        </div> 
+    
+    
+  
 </template>
 
 <script>
@@ -39,7 +37,7 @@ export default {
       }
       this.$store.dispatch('agents/login', credentials)
         .then(() =>{
-          console.log("Redirecionando..")
+          //console.log("Redirecionando..")
           this.$router.push("/agents")          
         })
         .catch(e => console.log(e))
@@ -48,43 +46,10 @@ export default {
   data(){
      return {
        agent: {
-           name: "",
-           password: ""
+           name: "025cd0b750de14b3bed2aea51b1c5bc3281808bf9ee1ada3462a025bdcec44619b",
+           password: "321"
         }
      }
   }
 }
 </script>
-
-<style>
-.container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
-}
-</style>

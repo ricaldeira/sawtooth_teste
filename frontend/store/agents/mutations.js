@@ -7,5 +7,6 @@ export default {
     },
     clearToken(state){
         state.token = null;
-    }
+    },    
+
 }

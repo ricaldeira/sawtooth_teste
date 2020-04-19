@@ -5,7 +5,7 @@ export const getters = {}
 
 export const actions = {
     nuxtServerInit(context){
-        console.log("NUXT INIT INDEX.JS")
+        //console.log("NUXT INIT INDEX.JS")
     }
 
 }

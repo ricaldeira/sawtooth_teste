@@ -1,5 +1,72 @@
 <template>
-<div class="header-container">
+<nav class="navbar is-light" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+  
+    <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+
+  <div id="navbarBasicExample" class="navbar-menu">
+    <div class="navbar-start">      
+      <nuxt-link class="navbar-item" to="/" >Home</nuxt-link>
+      <nuxt-link class="navbar-item" to="/documents" >Meus Documentos</nuxt-link>
+      <nuxt-link class="navbar-item" to="/agents" >Agentes</nuxt-link>
+     
+<!--  <a class="navbar-item">
+        Documentation
+      </a>
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          More
+        </a>
+
+        <div class="navbar-dropdown">
+          <a class="navbar-item">
+            About
+          </a>
+          <a class="navbar-item">
+            Jobs
+          </a>
+          <a class="navbar-item">
+            Contact
+          </a>
+          <hr class="navbar-divider">
+          <a class="navbar-item">
+            Report an issue
+          </a>
+        </div>
+      </div> -->
+    </div>
+      <div class="navbar-end">
+        <div class="navbar-item">
+          <div class="buttons">
+            <div v-if="$store.getters['agents/isAuthenticated']"> 
+              <AppButton type="button" :class="'is-warning'"                         
+                        @click="onLogout">
+                        Logout</AppButton>  
+
+            </div>
+            <div v-else>
+              <AppButton type="button" :class="'is-primary'"
+                        @click="onSignUp"> Sign Up </AppButton>  
+              <AppButton type="button" :class="'is-light'"
+                        @click="onLogin"> Login </AppButton>               
+            </div>
+            <!-- <div v-show="agents/isAuthenticated">
+            </div> -->
+            <!-- <div v-show="!agents/isAuthenticated">
+              
+            </div> -->
+        </div>
+      </div>
+    </div>
+    
+  </div>
+</nav>
+<!-- <div class="header-container">
   <header class="the-header">
     <div class="navigation-items">
       <ul class="nav-list">
@@ -12,11 +79,11 @@
       </ul>
     </div>
   </header>
-</div>
+</div> -->
 </template>
 
 <script>
-
+import { mapGetters } from 'vuex'
 export default {
   name: "TheHeader",
   methods:{
@@ -27,8 +94,23 @@ export default {
         })
         .catch(e => console.log(e))
     },
-
-  }
+    onSignUp(){
+      this.$router.push("/login")
+    },
+    onLogin(){
+      this.$router.push("/login")
+    }
+  },
+  data(){
+    return {
+      isAuthenticated:  this.$store.getters['agents/isAuthenticated']      
+    }
+  },
+  // computed: {    
+  //     ...mapGetters(['agents/isAuthenticated'])
+    
+    
+  // }
 };
 </script>
 

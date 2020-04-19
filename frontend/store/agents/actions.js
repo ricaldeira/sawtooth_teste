@@ -51,6 +51,20 @@ export default {
                 Cookie.set("tokenExpiration", expirationDate)     
             })  
     },
+    loadAgents(context){
+        return this.$axios.get("/api/agents")
+            .then(res => {                
+                const agents = [];
+                for ( const key in res.data ){
+                    let new_agent = {
+                        public_key: res.data[key]["public_key"],
+                        name: res.data[key]["name"]
+                    }
+                    agents.push(new_agent)
+                }
+                context.commit("setAgents", agents)
+            })        
+    },
 
     initAuth(vuexContext, req){
         console.log("InitAuth")
