@@ -60,13 +60,19 @@ export default {
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
-    proxy: true
+    proxy: true,
+    debug: true
   },
 
   proxy: {
+
     '/api/':{
       target: 'http://localhost:8000',
       pathRewrite: { '^/api/': '' }
+    },
+    '/api-validator/':{
+      target: process.env.apiValidatorURL || 'http://192.168.0.14:8008',
+      pathRewrite: { '^/api-validator/': ''}
     }
   },
   /*
@@ -87,7 +93,8 @@ export default {
     }
   },
   env:{
-    validatorURL: process.env.VALIDATOR_URL || "http://192.168.0.14:4004"
+    validatorURL: process.env.VALIDATOR_URL || "http://192.168.0.14:4004",
+    apiValidatorURL: process.env.API_VALIDATOR_URL || "http://192.168.0.14:8008"
   },
   transition:{
     name: "fade",

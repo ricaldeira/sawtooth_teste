@@ -4,8 +4,6 @@ export default {
     getAgents(context){
         return this.$axios.$get('/api/agents')
             .then(res => {
-                console.log("*** Recuperando ***")
-                console.log(res.data)
                 const agentsArray = []
                 for(const key in res.data){
                     console.log(res.data[key])
@@ -32,7 +30,6 @@ export default {
         context.commit("setToken", token)
         localStorage.setItem("token", token)    
         const expirationDate = new Date().getTime() + 3600
-        console.log("Expiration date:", expirationDate)            
         localStorage.setItem("tokenExpiration", expirationDate)
         Cookie.set("jwt", token)
         Cookie.set("tokenExpiration", expirationDate)
@@ -40,12 +37,10 @@ export default {
     createAgent(context, agent){
         return this.$axios.$post("/api/agents", agent)
             .then(data => {
-                console.log("Getting authorization")
                 const token = data['authorization'];
                 context.commit("setToken", token)
                 localStorage.setItem("token", token)    
                 const expirationDate = new Date().getTime() + 3600
-                console.log("Expiration date:", expirationDate)            
                 localStorage.setItem("tokenExpiration", expirationDate)
                 Cookie.set("jwt", token)
                 Cookie.set("tokenExpiration", expirationDate)     
@@ -67,12 +62,9 @@ export default {
     },
 
     initAuth(vuexContext, req){
-        console.log("InitAuth")
         let token;
         if (req){
-            console.log("[InitAuth]: req")
             if (!req.headers.cookies){
-                console.log("Sem cookie no headers")
                 return;
             }
             const jwtCookie = req.headers.cookie.split(";")
@@ -81,12 +73,9 @@ export default {
                 return;
             }
             token = jwtCookie.split("=")[1];
-            console.log("TOKEN COOKIE", token)
         }
         else if (process.client){
-            console.log("[InitAuth]: client", process)
             token = localStorage.getItem("token");
-            console.log("Token em cliente")        
             if (!token){
                 vuexContext.dispatch("logout")
                 return;
@@ -111,17 +100,13 @@ export default {
                 //gravaToken(data['authorization']);
                 //vuexContext.redirect("/agents")
                 const token = data['authorization'];
-                console.log("Gravando token", credentials);
                 context.commit("setToken", token)
                 localStorage.setItem("token", token)    
                 const expirationDate = new Date().getTime() + 3600
-                console.log("Expiration date:", expirationDate)            
                 localStorage.setItem("tokenExpiration", expirationDate)
                 Cookie.set("jwt", token)
                 Cookie.set("tokenExpiration", expirationDate) 
             })
             .catch(e => console.log("erro", e));
     }
-
-
 }
