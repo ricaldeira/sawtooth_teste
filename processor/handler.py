@@ -15,7 +15,7 @@
 
 import datetime
 import time
-
+import logging
 from sawtooth_sdk.processor.handler import TransactionHandler
 from sawtooth_sdk.processor.exceptions import InvalidTransaction
 
@@ -31,6 +31,7 @@ MIN_LAT = -90 * 1e6
 MAX_LNG = 180 * 1e6
 MIN_LNG = -180 * 1e6
 
+LOGGER = logging.getLogger(__name__)
 
 class SimpleSupplyHandler(TransactionHandler):
 
@@ -50,37 +51,39 @@ class SimpleSupplyHandler(TransactionHandler):
         header = transaction.header
         payload = SimpleSupplyPayload(transaction.payload)
         state = SimpleSupplyState(context)
+        try: 
+            _validate_timestamp(payload.timestamp)
 
-        _validate_timestamp(payload.timestamp)
-
-        if payload.action == payload_pb2.SimpleSupplyPayload.CREATE_AGENT:
-            _create_agent(
-                state=state,
-                public_key=header.signer_public_key,
-                payload=payload)
-        elif payload.action == payload_pb2.SimpleSupplyPayload.CREATE_RECORD:
-            _create_record(
-                state=state,
-                public_key=header.signer_public_key,
-                payload=payload)
-        elif payload.action == payload_pb2.SimpleSupplyPayload.TRANSFER_RECORD:
-            _transfer_record(
-                state=state,
-                public_key=header.signer_public_key,
-                payload=payload)
-        elif payload.action == payload_pb2.SimpleSupplyPayload.UPDATE_RECORD:
-            _update_record(
-                state=state,
-                public_key=header.signer_public_key,
-                payload=payload)
-        elif payload.action == payload_pb2.SimpleSupplyPayload.CREATE_DOCUMENT:
-            _create_document(
-                state=state,
-                signer_public_key=header.signer_public_key,
-                payload=payload)
-        else:
-            raise InvalidTransaction('Unhandled action')
-
+            if payload.action == payload_pb2.SimpleSupplyPayload.CREATE_AGENT:
+                _create_agent(
+                    state=state,
+                    public_key=header.signer_public_key,
+                    payload=payload)
+            elif payload.action == payload_pb2.SimpleSupplyPayload.CREATE_RECORD:
+                _create_record(
+                    state=state,
+                    public_key=header.signer_public_key,
+                    payload=payload)
+            elif payload.action == payload_pb2.SimpleSupplyPayload.TRANSFER_RECORD:
+                _transfer_record(
+                    state=state,
+                    public_key=header.signer_public_key,
+                    payload=payload)
+            elif payload.action == payload_pb2.SimpleSupplyPayload.UPDATE_RECORD:
+                _update_record(
+                    state=state,
+                    public_key=header.signer_public_key,
+                    payload=payload)
+            elif payload.action == payload_pb2.SimpleSupplyPayload.CREATE_DOCUMENT:
+                _create_document(
+                    state=state,
+                    signer_public_key=header.signer_public_key,
+                    payload=payload)
+            else:
+                raise InvalidTransaction('Unhandled action')
+        except:
+            LOGGER.error("Erro no processamento SimplySupplyHandler . change the name of it") 
+            print("Erro no processamento!!!")
 
 def _create_agent(state, public_key, payload):
     if state.get_agent(public_key):
@@ -198,4 +201,3 @@ def _create_document(state, signer_public_key, payload):
                     public_key=signer_public_key,
                     document_hash=payload.data.document_id,
                     timestamp=payload.timestamp)
-    print(state)

@@ -5,6 +5,6 @@
 <script>
 export default {
     // layout: "logged",
-    middleware: ["auth", "check-auth"],
+    //middleware: ["auth", "check-auth"]
 }
 </script>

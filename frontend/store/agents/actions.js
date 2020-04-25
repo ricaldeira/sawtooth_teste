@@ -35,7 +35,8 @@ export default {
         Cookie.set("tokenExpiration", expirationDate)
     },
     createAgent(context, agent){
-        return this.$axios.$post("/api/agents", agent)
+        console.log("Criando agente")
+        return this.$axios.post("/api/agents", agent)
             .then(data => {
                 const token = data['authorization'];
                 context.commit("setToken", token)
@@ -44,6 +45,8 @@ export default {
                 localStorage.setItem("tokenExpiration", expirationDate)
                 Cookie.set("jwt", token)
                 Cookie.set("tokenExpiration", expirationDate)     
+            }).catch(e => {
+                console.log("Erro",e.error )
             })  
     },
     loadAgents(context){

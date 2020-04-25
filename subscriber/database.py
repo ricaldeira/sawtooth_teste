@@ -90,7 +90,7 @@ CREATE TABLE IF NOT EXISTS documents (
     id               bigserial PRIMARY KEY,
     public_key       varchar,
     description      varchar,
-    hash_code        varchar,
+    document_hash    varchar,
     document         bytea, 
     timestamp        bigint,
     start_block_num  bigint,
@@ -101,7 +101,7 @@ CREATE TABLE IF NOT EXISTS documents (
 CREATE_DOCUMENT_OWNER_STMTS = """
 CREATE TABLE IF NOT EXISTS document_owners(
     id               bigserial PRIMARY KEY,
-    document_id      varchar,
+    document_hash      varchar,
     agent_id         varchar,
     timestamp        bigint,
     start_block_num  bigint,
@@ -402,20 +402,20 @@ class Database(object):
     def insert_document(self, record_dict):
         update_document = """
         UPDATE documents SET end_block_num = {}
-        WHERE end_block_num = {} AND document_id = '{}'
+        WHERE end_block_num = {} AND document_hash = '{}'
         """.format(
             record_dict['start_block_num'],
             record_dict['end_block_num'],
-            record_dict['document_id'])
+            record_dict['document_hash'])
 
         insert_document = """
         INSERT INTO documents (
-        document_id,
+        document_hash,
         start_block_num,
         end_block_num)
         VALUES ('{}', '{}', '{}');
         """.format(
-            record_dict['document_id'],
+            record_dict['document_hash'],
             record_dict['start_block_num'],
             record_dict['end_block_num'])
 
@@ -427,23 +427,23 @@ class Database(object):
     def _insert_document_owners(self, record_dict):
         update_document_owners = """
         UPDATE document_owners SET end_block_num = {}
-        WHERE end_block_num = {} AND document_id = '{}'
+        WHERE end_block_num = {} AND document_hash = '{}'
         """.format(
             record_dict['start_block_num'],
             record_dict['end_block_num'],
-            record_dict['document_id'])
+            record_dict['document_hash'])
 
         insert_document_owners = [
             """
             INSERT INTO document_owners (
-            document_id,
+            document_hash,            
             agent_id,
             timestamp,
             start_block_num,
             end_block_num)
             VALUES ('{}', '{}', '{}', '{}', '{}');
             """.format(
-                record_dict['document_id'],
+                record_dict['document_hash'],
                 owner['agent_id'],
                 owner['timestamp'],
                 record_dict['start_block_num'],

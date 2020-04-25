@@ -169,16 +169,18 @@ class SimpleSupplyState(object):
         self._context.set_state(updated_state, timeout=self._timeout)
     
     def set_document(self, public_key, document_hash, timestamp):
-        
+
         owner = document_pb2.Document.Owner(
             agent_id=public_key,
             timestamp=timestamp)
         
         document = document_pb2.Document(
-            document_id=document_hash,
+            document_hash=document_hash,
+            document_valid = True,
             owners=[owner])
 
-        container = agent_pb2.AgentContainer()
+        container = document_pb2.DocumentContainer()
+        # agent_pb2.AgentContainer()
 
         state_entries = self._context.get_state(
             addresses=[document_hash], timeout=self._timeout)
@@ -189,5 +191,5 @@ class SimpleSupplyState(object):
         data = container.SerializeToString()
 
         updated_state = {}
-        updated_state[address] = data
+        updated_state[document_hash] = data
         self._context.set_state(updated_state, timeout=self._timeout)

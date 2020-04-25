@@ -1,1 +1,1 @@
-PYTHONPATH=/opt/teste_python python rest_api/main.py --db-host 192.168.0.14 -C tcp://192.168.0.14:4004 -vv
+PYTHONPATH=/opt/teste_python python rest_api/main.py --db-host 192.168.0.14 -C tcp://192.168.0.14:4004 -vvv

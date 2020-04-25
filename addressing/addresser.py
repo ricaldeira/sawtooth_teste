@@ -48,11 +48,14 @@ def get_address_type(address):
         return AddressSpace.OTHER_FAMILY
 
     infix = address[6:8]
-
+    """ Pega o segundo bloco do endereço
+    """
     if infix == '00':
         return AddressSpace.AGENT
     if infix == '01':
         return AddressSpace.RECORD
+    if infix == '02':
+        return AddressSpace.DOCUMENT
 
     return AddressSpace.OTHER_FAMILY
 
@@ -69,4 +72,4 @@ def get_document_address(document):
             file_hash.update(fb)
             fb = f.read(BLOCK_SIZE)
     
-    return NAMESPACE + AGENT_PREFIX + file_hash.hexdigest()[:62]
+    return NAMESPACE + DOCUMENT_PREFIX + file_hash.hexdigest()[:62]

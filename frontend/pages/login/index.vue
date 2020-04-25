@@ -45,17 +45,18 @@ export default {
         .catch(e => console.log(e))
     },
     onSignUp(){
+      console.log("Iniciando criação")
       this.$store.dispatch('agents/createAgent', this.agent)
         .then(res => {
-          console.log("fazendo login", res.data)
-          this.$router.push('/agents')
+
+          this.$router.push("/agents");
         })
     }
   },
   data(){
      return {
        agent: {
-           name: "032eefbd90cf19087a985b2f4c7434f117bd852331f46b1584421b5a78ad8ff665",
+           name: "02c11fa577840f2d2741910bcf5f87576127936ba6a9eb6e689c0402e69e173c0c",
            password: "123"
         }
      }

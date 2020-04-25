@@ -10,7 +10,7 @@ import AgentList from '@/components/Agent/AgentList'
 export default {
     // layout: "logged",
     components: {AgentList},
-    middleware: ["auth", "check-auth"],
+    middleware: ["check-auth", "auth"],
     
     fetch({store}){
         store.dispatch("agents/loadAgents")
