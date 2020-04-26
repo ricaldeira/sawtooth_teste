@@ -168,7 +168,7 @@ class SimpleSupplyState(object):
         updated_state[address] = data
         self._context.set_state(updated_state, timeout=self._timeout)
     
-    def set_document(self, public_key, document_hash, timestamp):
+    def set_document(self, public_key, document_hash, file_name, timestamp):
 
         owner = document_pb2.Document.Owner(
             agent_id=public_key,
@@ -176,11 +176,10 @@ class SimpleSupplyState(object):
         
         document = document_pb2.Document(
             document_hash=document_hash,
-            document_valid = True,
+            file_name=file_name,
             owners=[owner])
 
         container = document_pb2.DocumentContainer()
-        # agent_pb2.AgentContainer()
 
         state_entries = self._context.get_state(
             addresses=[document_hash], timeout=self._timeout)
@@ -193,3 +192,6 @@ class SimpleSupplyState(object):
         updated_state = {}
         updated_state[document_hash] = data
         self._context.set_state(updated_state, timeout=self._timeout)
+
+    def get_document_validity(self, document_id, document_hash):
+        container = document_pb2.DocumentContainer()

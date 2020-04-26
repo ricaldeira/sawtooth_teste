@@ -28,6 +28,7 @@ from transaction_creation import make_create_record_transaction
 from transaction_creation import make_transfer_record_transaction
 from transaction_creation import make_update_record_transaction
 from transaction_creation import make_create_document_transaction
+from transaction_creation import make_is_valid_document_transaction
 
 class Messenger(object):
     def __init__(self, validator_url):
@@ -81,8 +82,9 @@ class Messenger(object):
         await self._send_and_wait_for_commit(batch)
 
     async def send_create_document_transaction(self,
-                                             private_key,                                             
-                                             document,
+                                             private_key,
+                                             file_name,
+                                             document_hash,
                                              timestamp):
         transaction_signer = self._crypto_factory.new_signer(
             secp256k1.Secp256k1PrivateKey.from_hex(private_key))
@@ -90,7 +92,26 @@ class Messenger(object):
         batch = make_create_document_transaction(
             transaction_signer=transaction_signer,
             batch_signer=self._batch_signer,
-            document=document,            
+            file_name=file_name,
+            document_hash = document_hash,            
+            timestamp=timestamp)
+        await self._send_and_wait_for_commit(batch)
+        # return transaction_signer.get_public_key()
+    
+    async def send_is_valid_document_transaction(self, private_key, 
+                                                document_id, 
+                                                document_hash,
+                                                new_document_hash,
+                                                timestamp):
+        transaction_signer = self._crypto_factory.new_signer(
+            secp256k1.Secp256k1PrivateKey.from_hex(private_key))
+        
+        batch = make_is_valid_document_transaction(
+            transaction_signer=transaction_signer,
+            batch_signer=self._batch_signer,
+            document_id = document_id,
+            document_hash = document_hash,
+            new_document_hash = new_document_hash,
             timestamp=timestamp)
         await self._send_and_wait_for_commit(batch)
 

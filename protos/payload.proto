@@ -40,7 +40,7 @@ message SimpleSupplyPayload{
     uint64 timestamp = 6;
 
     CreateDocumentAction create_document = 7;
-    ValidateDocumentAction validate_documento =8;
+    ValidateDocumentAction validate_document =8;
 }
 
 
@@ -80,10 +80,13 @@ message TransferRecordAction {
 }
 
 message CreateDocumentAction {
-    string document_id =1;
+    string document_hash =1;
+    string file_name=2;
     
 }
 
 message ValidateDocumentAction {
     string document_id = 1;
+    string document_hash = 2;
+    string new_document_hash = 3;
 }

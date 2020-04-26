@@ -25,7 +25,7 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from errors import ApiBadRequest
 from errors import ApiNotFound
 from errors import ApiUnauthorized
-
+from addressing import addresser
 
 LOGGER = logging.getLogger(__name__)
 
@@ -189,15 +189,36 @@ class RouteHandler(object):
     async def create_document(self, request):
         private_key = await self._authorize(request)
         data =  await request.post()
-        nome_arquivo = data['file'].filename
+        file_name = data['file'].filename
         arquivo = data['file'].file
         content_type = data['file'].content_type
         document = arquivo.read()    
-   
-        
+        document_hash = addresser.get_document_address(document)
+
+
         await self._messenger.send_create_document_transaction(
+            private_key=private_key,
+            file_name=file_name,
+            document_hash = document_hash,
+            timestamp=get_time())
+
+        # await self._database.insert_document(public_key.as_hex(),
+        #                 nome_arquivo, arquivo, document_hash)
+        
+        return json_response(
+            {'data': 'Create document transaction submitted'})
+
+    async def validate_document(self, request):
+        private_key = await self._authorize(request)
+        body = await decode_request(request)
+        required_fields = ['document_id', 'document_hash', 'file_name']
+        validate_fields(required_fields, body)
+
+        await self._messenger.send_is_valid_document_transaction(
             private_key=private_key,            
-            document=document,
+            document_id = body['document_id'],
+            document_hash = body['document_hash'],
+            new_document_hash = body['new_document_hash'],
             timestamp=get_time())
 
         return json_response(

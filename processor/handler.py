@@ -195,9 +195,10 @@ def _create_document(state, signer_public_key, payload):
     if state.get_agent(signer_public_key) is None:
         raise InvalidTransaction('Agent with the public key {} does '
                                  'not exist'.format(signer_public_key))
-    if payload.data.document_id is None:
+    if payload.data.document_hash  is None:
         raise InvalidTransaction('Hash do documento invalido ou vazio')
     state.set_document(
                     public_key=signer_public_key,
-                    document_hash=payload.data.document_id,
+                    document_hash=payload.data.document_hash,
+                    file_name=payload.data.file_name,                    
                     timestamp=payload.timestamp)

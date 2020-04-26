@@ -201,7 +201,7 @@ class Database(object):
 
     async def fetch_all_document_resources(self):
         fetch_documents = """
-        SELECT id FROM documents
+        SELECT id, document_hash, description, file_name, is_valid  FROM documents
         WHERE ({0}) >= start_block_num
         AND ({0}) < end_block_num;
         """.format(LATEST_BLOCK_NUM)
@@ -213,12 +213,12 @@ class Database(object):
 
                 for document in documents:
                     fetch_document_owners = """
-                    SELECT agent_id, timestamp
+                    SELECT agent_id, document_hash, timestamp
                     FROM document_owners
-                    WHERE document_id='{0}'
+                    WHERE document_hash='{0}'
                     AND ({1}) >= start_block_num
                     AND ({1}) < end_block_num;
-                    """.format(document['document_id'], LATEST_BLOCK_NUM)
+                    """.format(document['document_hash'], LATEST_BLOCK_NUM)
 
                     await cursor.execute(fetch_document_owners)
                     document['owners'] = await cursor.fetchall()
@@ -226,3 +226,25 @@ class Database(object):
                 return documents
             except TypeError:
                 return []        
+
+    async def insert_document(self, public_key, 
+                    file_name, document_hash):
+        insert = """
+        INSERT INTO documents (
+            public_key,
+            document_hash,
+            file_name,
+            is_valid            
+        )
+        VALUES ('{}', '{}', '{}');
+        """.format(
+            public_key,
+            document_hash,                        
+            file_name,
+            'true'
+            ) 
+
+        async with self._conn.cursor() as cursor:
+            await cursor.execute(insert)
+
+        self._conn.commit()

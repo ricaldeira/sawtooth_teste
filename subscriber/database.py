@@ -90,6 +90,8 @@ CREATE TABLE IF NOT EXISTS documents (
     id               bigserial PRIMARY KEY,
     public_key       varchar,
     description      varchar,
+    file_name        varchar,
+    is_valid         boolean,
     document_hash    varchar,
     document         bytea, 
     timestamp        bigint,
@@ -411,11 +413,15 @@ class Database(object):
         insert_document = """
         INSERT INTO documents (
         document_hash,
+        file_name,
+        is_valid,
         start_block_num,
         end_block_num)
-        VALUES ('{}', '{}', '{}');
+        VALUES ('{}', '{}', '{}', '{}', '{}');
         """.format(
             record_dict['document_hash'],
+            record_dict['file_name'],
+            '1',#Documento válido na primeira inserção
             record_dict['start_block_num'],
             record_dict['end_block_num'])
 

@@ -9,6 +9,8 @@ message Document{
     string document_hash = 1;    
     bool document_valid = 2;
     repeated Owner owners = 3;
+    string file_name = 4;
+    string description = 5;
 }
 
 message DocumentContainer {

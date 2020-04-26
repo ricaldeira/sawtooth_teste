@@ -108,10 +108,11 @@ def start_rest_api(host, port, messenger, database):
     app.router.add_post('/documents', handler.create_document)
 
     LOGGER.info('Starting Simple Supply REST API on %s:%s', host, port)
+    
     web.run_app(
         app,
         host=host,
-        port=port,
+        port=port,        
         access_log=LOGGER,
         access_log_format='%r: %s status, %b size, in %Tf s')
 

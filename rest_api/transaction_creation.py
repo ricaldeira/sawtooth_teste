@@ -203,8 +203,9 @@ def make_update_record_transaction(transaction_signer,
         batch_signer=batch_signer)
 
 def make_create_document_transaction(transaction_signer,
-                                   batch_signer,                                   
-                                   document,
+                                   batch_signer,  
+                                   file_name,                                                                    
+                                   document_hash,
                                    timestamp):
     """Make a CreateDocumentAction transaction and wrap it in a batch
 
@@ -217,17 +218,17 @@ def make_create_document_transaction(transaction_signer,
     Returns:
         batch_pb2.Batch: The transaction wrapped in a batch
     """
-    hash_documento = addresser.get_document_address(document)                  
+    
     inputs = [
         addresser.get_agent_address(
             transaction_signer.get_public_key().as_hex()),
-        hash_documento
+        document_hash
     ]
 
-    outputs = [hash_documento]
+    outputs = [document_hash]
 
     action = payload_pb2.CreateDocumentAction(
-        document_id=hash_documento)
+        document_hash=document_hash, file_name=file_name)
 
     payload = payload_pb2.SimpleSupplyPayload(
         action=payload_pb2.SimpleSupplyPayload.CREATE_DOCUMENT,
@@ -241,6 +242,50 @@ def make_create_document_transaction(transaction_signer,
         outputs=outputs,
         transaction_signer=transaction_signer,
         batch_signer=batch_signer)
+
+def make_is_valid_document_transaction(transaction_signer,
+                                   batch_signer,                                   
+                                   document_id, document_hash,
+                                   new_document_hash,
+                                   timestamp):
+    """Make a IsValidDocumentAction transaction and wrap it in a batch
+
+    Args:
+        transaction_signer (sawtooth_signing.Signer): The transaction key pair
+        batch_signer (sawtooth_signing.Signer): The batch key pair        
+        document_id (str): Unique ID of the document
+        timestamp (int): Unix UTC timestamp of when the agent is created
+
+    Returns:
+        batch_pb2.Batch: The transaction wrapped in a batch
+    """
+    agent_address = addresser.get_agent_address(
+        transaction_signer.get_public_key().as_hex())
+    
+
+    inputs = [agent_address, document_hash]
+
+    outputs = [document_hash]
+
+    action = payload_pb2.ValidateDocumentAction(
+        document_id=document_id,
+        document_hash = document_hash,
+        new_document_hash = new_document_hash
+        )
+
+    payload = payload_pb2.SimpleSupplyPayload(
+        action=payload_pb2.SimpleSupplyPayload.VALIDATE_DOCUMENT,
+        validate_document=action,
+        timestamp=timestamp)
+    payload_bytes = payload.SerializeToString()
+
+    return _make_batch(
+        payload_bytes=payload_bytes,
+        inputs=inputs,
+        outputs=outputs,
+        transaction_signer=transaction_signer,
+        batch_signer=batch_signer)
+
 
 def _make_batch(payload_bytes,
                 inputs,
