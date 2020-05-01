@@ -32,11 +32,12 @@ RUN apt-get install -y --allow-unauthenticated -q \
 RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - \
     && apt-get install -y nodejs npm
 
+RUN python3 -m pip install grpcio-tools
+
 RUN pip3 install \
     aiohttp \
     aiopg \
     bcrypt \
-    grpcio-tools \
     itsdangerous \
     nose2 \
     psycopg2-binary \
