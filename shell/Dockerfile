@@ -22,6 +22,9 @@ RUN \
  && echo 'deb [arch=amd64] http://repo.sawtooth.me/ubuntu/chime/stable bionic universe' >> /etc/apt/sources.list \
  && apt-get update
 
+RUN python3 -V
+
+
 RUN apt-get install -y --allow-unauthenticated -q \
     curl \
     python3-pip \
