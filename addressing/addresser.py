@@ -23,6 +23,7 @@ NAMESPACE = hashlib.sha512(FAMILY_NAME.encode('utf-8')).hexdigest()[:6]
 AGENT_PREFIX = '00'
 RECORD_PREFIX = '01'
 DOCUMENT_PREFIX = '02'
+CAR_PREFIX = '03'
 
 
 @enum.unique
@@ -30,6 +31,7 @@ class AddressSpace(enum.IntEnum):
     AGENT = 0
     RECORD = 1
     DOCUMENT = 2
+    CAR = 3
     OTHER_FAMILY = 100
 
 
@@ -73,3 +75,7 @@ def get_document_address(document):
             fb = f.read(BLOCK_SIZE)
     
     return NAMESPACE + DOCUMENT_PREFIX + file_hash.hexdigest()[:62]
+
+def get_car_address(chassi):
+    return NAMESPACE + CAR_PREFIX + hashlib.sha512(
+        chassi.encode('utf-8')).hexdigest()[:62]    

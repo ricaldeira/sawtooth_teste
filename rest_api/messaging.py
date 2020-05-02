@@ -29,6 +29,7 @@ from transaction_creation import make_transfer_record_transaction
 from transaction_creation import make_update_record_transaction
 from transaction_creation import make_create_document_transaction
 from transaction_creation import make_is_valid_document_transaction
+from transaction_creation import make_create_car_transaction
 
 class Messenger(object):
     def __init__(self, validator_url):
@@ -175,3 +176,17 @@ class Messenger(object):
             raise ApiInternalError('Transaction submitted but timed out')
         elif status == client_batch_submit_pb2.ClientBatchStatus.UNKNOWN:
             raise ApiInternalError('Something went wrong. Try again later')
+
+    async def send_create_car_transaction(self, private_key, timestamp,
+            chassi, license, color=None, brand=None, model=None, yearManufactured=None, yearModel=None):
+        
+        transaction_signer = self._crypto_factory.new_signer(
+                secp256k1.Secp256k1PrivateKey.from_hex(private_key)
+                )
+        batch = make_create_car_transaction(
+            transaction_signer=transaction_signer,
+            batch_signer=self._batch_signer,
+            timestamp=timestamp
+        )
+
+    

@@ -110,6 +110,33 @@ CREATE TABLE IF NOT EXISTS document_owners(
     end_block_num    bigint
 )
 """
+CREATE_CAR_STMTS = """
+CREATE TABLE IF NOT EXISTS cars (
+    id               bigserial PRIMARY KEY,    
+    chassi      varchar,
+    license     varchar,
+    color       varchar,
+    brand       varchar,
+    model       varchar,
+    yearManufactured int,
+    yearModel        int,
+    timestamp        bigint,
+    start_block_num  bigint,
+    end_block_num    bigint
+)
+"""
+
+CREATE_CAR_OWNER_STMTS = """
+CREATE TABLE IF NOT EXISTS car_owners(
+    id               bigserial PRIMARY KEY,
+    chassi           varchar,
+    agent_id         varchar,
+    timestamp        bigint,
+    start_block_num  bigint,
+    end_block_num    bigint
+)
+"""
+
 class Database(object):
     """Simple object for managing a connection to a postgres database
     """
@@ -172,6 +199,12 @@ class Database(object):
             
             LOGGER.debug('Creating table: document_owners')
             cursor.execute(CREATE_DOCUMENT_OWNER_STMTS)
+            
+            LOGGER.debug('Creating table: cars')
+            cursor.execute(CREATE_CAR_STMTS)
+            
+            LOGGER.debug('Creating table: car_owners')
+            cursor.execute(CREATE_CAR_OWNER_STMTS)
 
         self._conn.commit()
 
@@ -210,19 +243,37 @@ class Database(object):
         delete_records = """
         DELETE FROM records WHERE start_block_num >= {}
         """.format(block_num)
+        
         update_records = """
         UPDATE records SET end_block_num = null
         WHERE end_block_num >= {}
         """.format(block_num)
+        
         delete_document_owners = """
         DELETE FROM document_owners WHERE document_id =
         (SELECT document_id FROM documents WHERE start_block_num >= {})
         """.format(block_num)
+        
         delete_documents = """
         DELETE FROM documents WHERE start_block_num >= {}
         """.format(block_num)
+
         update_documents = """
         UPDATE documents SET end_block_num = null
+        WHERE end_block_num >= {}
+        """.format(block_num)        
+        
+        delete_car_owners = """
+        DELETE FROM car_owners WHERE car_id =
+        (SELECT car_id FROM cars WHERE start_block_num >= {})
+        """.format(block_num)
+        
+        delete_cars = """
+        DELETE FROM cars WHERE start_block_num >= {}
+        """.format(block_num)
+
+        update_cars = """
+        UPDATE cars SET end_block_num = null
         WHERE end_block_num >= {}
         """.format(block_num)        
 
@@ -240,6 +291,9 @@ class Database(object):
             cursor.execute(delete_document_owners)
             cursor.execute(delete_documents)
             cursor.execute(update_documents)
+            cursor.execute(delete_car_owners)
+            cursor.execute(delete_cars)
+            cursor.execute(update_cars)
 
             cursor.execute(delete_blocks)
 
@@ -459,4 +513,66 @@ class Database(object):
         with self._conn.cursor() as cursor:
             cursor.execute(update_document_owners)
             for insert in insert_document_owners:
+                cursor.execute(insert)        
+   
+   
+    def insert_car(self, car_dict):
+        update_car = """
+        UPDATE cars SET end_block_num = {}
+        WHERE end_block_num = {} AND document_hash = '{}'
+        """.format(
+            car_dict['start_block_num'],
+            car_dict['end_block_num'],
+            car_dict['chassis'])
+
+        insert_cars = """
+        INSERT INTO cars (
+        chassis, license, color, brand, model, yearManufactured, yearModel,
+        start_block_num,
+        end_block_num)
+        VALUES ('{}', '{}', '{}', '{}', '{}');
+        """.format(
+            car_dict['chassis'],
+            car_dict['license'],
+            car_dict['color'],
+            car_dict['brand'],
+            car_dict['model'],
+            car_dict['yearManufactured'],
+            car_dict['yearModel'],            
+            car_dict['start_block_num'],
+            car_dict['end_block_num'])
+
+        with self._conn.cursor() as cursor:
+            cursor.execute(update_car)
+            cursor.execute(insert_car)
+        self._insert_car_owners(car_dict)
+
+    def _insert_car_owners(self, car_dict):
+        update_car_owners = """
+        UPDATE car_owners SET end_block_num = {}
+        WHERE end_block_num = {} AND chassis = '{}'
+        """.format(
+            car_dict['start_block_num'],
+            car_dict['end_block_num'],
+            car_dict['chassis'])
+
+        insert_car_owners = [
+            """
+            INSERT INTO car_owners (
+            chassis, license, color, brand, model, yearManufactured, yearModel,
+            timestamp,
+            start_block_num,
+            end_block_num)
+            VALUES ('{}', '{}', '{}', '{}', '{}');
+            """.format(
+                car_dict['chassis'],
+                owner['agent_id'],
+                owner['timestamp'],
+                car_dict['start_block_num'],
+                car_dict['end_block_num'])
+            for owner in car_dict['owners']
+        ]
+        with self._conn.cursor() as cursor:
+            cursor.execute(update_car_owners)
+            for insert in insert_car_owners:
                 cursor.execute(insert)        

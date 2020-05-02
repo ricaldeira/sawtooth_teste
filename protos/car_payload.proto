@@ -1,0 +1,31 @@
+
+syntax = "proto3";
+
+message CarTrackerPayload{
+    enum Action {
+        CREATE_CAR = 0;
+        UPDATE_CAR = 1;
+    }
+
+    Action action = 1;
+    CreateCarAction create_car = 2;
+    UpdateCarAction update_car = 3;
+}
+
+message CreateCarAction{
+    string chassis = 1;
+    string license = 2;
+    string color = 3;
+    string brand = 4;
+    string model = 5;
+    int32 yearManufactured = 6;
+    int32 yearModel = 7;
+    string agent_id = 8;
+}
+
+message UpdateCarAction{
+    string agent_id =1;
+    uint64 kilometrage = 2;
+
+
+}

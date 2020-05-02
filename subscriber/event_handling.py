@@ -121,3 +121,10 @@ def _apply_document_change(database, block_num, documents):
         document['start_block_num'] = block_num
         document['end_block_num'] = MAX_BLOCK_NUMBER
         database.insert_document(document)        
+
+def _apply_car_change(database, block_num, cars):
+    for car in cars:
+        cars['start_block_num'] = block_num
+        cars['end_block_num'] = MAX_BLOCK_NUMBER
+        database.insert_car(car)
+

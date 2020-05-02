@@ -227,7 +227,7 @@ class Database(object):
             except TypeError:
                 return []        
 
-    async def insert_document(self, public_key, 
+    async def insert_document(self, public_key,     
                     file_name, document_hash):
         insert = """
         INSERT INTO documents (
@@ -248,3 +248,32 @@ class Database(object):
             await cursor.execute(insert)
 
         self._conn.commit()
+
+    async def fetch_all_car_resources(self):
+        fetch_cars = """
+        SELECT  id, chassi, license, color, brand, model, yearManufactured, yearModel,
+        FROM cars
+        WHERE ({0}) >= start_block_num
+        AND ({0}) < end_block_num;
+        """.format(LATEST_BLOCK_NUM)
+
+        async with self._conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            try:
+                await cursor.execute(fetch_cars)
+                cars = await cursor.fetchall()
+
+                for car in cars:
+                    fetch_car_owners = """
+                    SELECT agent_id, chassis, timestamp
+                    FROM car_owners
+                    WHERE chassis='{0}'
+                    AND ({1}) >= start_block_num
+                    AND ({1}) < end_block_num;
+                    """.format(car['chassis'], LATEST_BLOCK_NUM)
+
+                    await cursor.execute(fetch_car_owners)
+                    car['owners'] = await cursor.fetchall()
+
+                return cars
+            except TypeError:
+                return []        

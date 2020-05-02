@@ -106,8 +106,11 @@ def start_rest_api(host, port, messenger, database):
 
     app.router.add_get('/documents', handler.list_documents)
     app.router.add_post('/documents', handler.create_document)
+    
+    app.router.add_get('/cars', handler.list_cars)    
+    app.router.add_post('/cars', handler.create_car)
 
-    LOGGER.info('Starting Simple Supply REST API on %s:%s', host, port)
+    LOGGER.info('Starting GOODS MANAGER REST API on %s:%s', host, port)
     
     web.run_app(
         app,

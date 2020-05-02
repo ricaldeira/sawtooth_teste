@@ -18,6 +18,7 @@ from addressing import addresser
 from protobufs.protos import agent_pb2
 from protobufs.protos import record_pb2
 from protobufs.protos import document_pb2
+from protobufs.protos import car_pb2
 
 
 class SimpleSupplyState(object):
@@ -195,3 +196,32 @@ class SimpleSupplyState(object):
 
     def get_document_validity(self, document_id, document_hash):
         container = document_pb2.DocumentContainer()
+
+    def set_car(self, public_key, 
+                timestamp,
+                chassis, license, yearManufactured, yearModel,
+                color=None, brand=None, model=None, 
+                ):
+        address = addresser.get_car_address(chassis)
+        car = car_pb2.Car(
+            chassis=chassis,
+            license=license,
+            color=color,
+            brand=brand,
+            model=model,
+            yearManufactured=yearManufactured,
+            yearModel=yearModel
+        )
+        container = car_pb2.CarContainer()
+
+        state_entries = self._context.get_state(
+            addresses=[address], timeout=self._timeout)
+        
+        if state_entries:
+            container.ParseFromString(state_entries[0].data)
+        
+        container.entries.extend([car])
+        data = container.SerializeToString()
+        updated_state = {}
+        updated_state[address] = data
+        self._context.set_state(updated_state, timeout=self._timeout)

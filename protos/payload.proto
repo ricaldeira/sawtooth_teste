@@ -24,6 +24,7 @@ message SimpleSupplyPayload{
         TRANSFER_RECORD = 3;
         CREATE_DOCUMENT = 4;
         VALIDATE_DOCUMENT = 5;
+        
     }
 
     // Whether the payload contains a create agent, create record,
@@ -41,6 +42,7 @@ message SimpleSupplyPayload{
 
     CreateDocumentAction create_document = 7;
     ValidateDocumentAction validate_document =8;
+    
 }
 
 
