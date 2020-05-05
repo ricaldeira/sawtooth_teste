@@ -1,8 +1,26 @@
 <template>
     <div class="section">
         <form @submit.prevent="">
-            <input type="file" @change="onFileChanged">
-            <button @click="onUpload"> Upload </button>
+            <div class="file has-name is-fullwidth">
+                <label class="file-label">
+                    <input class="file-input" type="file" name="resume" @change="onFileChanged">
+                    <span class="file-cta">
+                    <span class="file-icon">
+                        <i class="fas fa-upload"></i>
+                    </span>
+                    <span class="file-label">
+                        Choose a file…
+                    </span>
+                    </span>
+                    <span class="file-name" v-if="selectedFile !== null" >
+                        {{selectedFile.name}}
+                    </span>
+                </label>
+                <button class="button is-primary"  @click="onUpload"> Upload </button>
+            </div>
+
+            
+            <!-- <input type="file" @change="onFileChanged"> -->
         </form>
     <DocumentList :loadedDocuments="loadedDocuments" />
 
@@ -31,7 +49,7 @@ export default {
     methods:{
         onFileChanged(event){
             const file = event.target.files[0]
-            this.selectedFile = file
+            this.selectedFile = file            
         },
         onUpload(){
             this.$store.dispatch("documents/uploadFile", this.selectedFile)
