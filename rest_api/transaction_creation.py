@@ -24,7 +24,7 @@ from addressing import addresser
 # from addressing.addresser import get_address_type
 # from addressing.addresser import get_record_address
 from protobufs.protos import payload_pb2
-from protobufs.protos import car_payload_pb2
+
 
 
 def make_create_agent_transaction(transaction_signer,
@@ -289,17 +289,17 @@ def make_is_valid_document_transaction(transaction_signer,
 
 
 def make_create_car_transaction(transaction_signer,
-                                   batch_signer, chassis, 
+                                   batch_signer, timestamp, chassis, 
                                    license, color, brand, model,
                                    yearManufactured, yearModel,
-                                   timestamp):
+                                   ):
     agent_address = addresser.get_agent_address(
         transaction_signer.get_public_key().as_hex())
     car_address = addresser.get_car_address(chassis)
     inputs = [agent_address, car_address]
     outputs = [car_address]
 
-    action = car_payload_pb2.CreateCarAction(
+    action = payload_pb2.CreateCarAction(
         chassis=chassis,
         license=license,
         color=color,
@@ -309,8 +309,8 @@ def make_create_car_transaction(transaction_signer,
         yearModel=yearModel
     )
 
-    payload = car_payload_pb2.CarTrackerPayload(
-        action=car_payload_pb2.CarTrackerPayload.CREATE_CAR,
+    payload = payload_pb2.SimpleSupplyPayload(
+        action= payload_pb2.SimpleSupplyPayload.CREATE_CAR,
         create_car=action,
         timestamp=timestamp
     )

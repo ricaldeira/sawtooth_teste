@@ -24,6 +24,8 @@ message SimpleSupplyPayload{
         TRANSFER_RECORD = 3;
         CREATE_DOCUMENT = 4;
         VALIDATE_DOCUMENT = 5;
+        CREATE_CAR = 6;
+        UPDATE_CAR = 7;
         
     }
 
@@ -42,6 +44,8 @@ message SimpleSupplyPayload{
 
     CreateDocumentAction create_document = 7;
     ValidateDocumentAction validate_document =8;
+    CreateCarAction create_car = 9;
+    UpdateCarAction update_car = 10;
     
 }
 
@@ -91,4 +95,21 @@ message ValidateDocumentAction {
     string document_id = 1;
     string document_hash = 2;
     string new_document_hash = 3;
+}
+message CreateCarAction{
+    string chassis = 1;
+    string license = 2;
+    string color = 3;
+    string brand = 4;
+    string model = 5;
+    int32 yearManufactured = 6;
+    int32 yearModel = 7;
+    string agent_id = 8;
+}
+
+message UpdateCarAction{
+    string agent_id =1;
+    uint64 kilometrage = 2;
+
+
 }

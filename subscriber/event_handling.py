@@ -86,6 +86,8 @@ def _apply_state_changes(database, events, block_num, block_id):
             _apply_record_change(database, block_num, resources)
         elif data_type == AddressSpace.DOCUMENT:
             _apply_document_change(database, block_num, resources)
+        elif data_type == AddressSpace.CAR:
+            _apply_car_change(database, block_num, resources)
         else:
             LOGGER.warning('Unsupported data type: %s', data_type)
 
@@ -124,7 +126,7 @@ def _apply_document_change(database, block_num, documents):
 
 def _apply_car_change(database, block_num, cars):
     for car in cars:
-        cars['start_block_num'] = block_num
-        cars['end_block_num'] = MAX_BLOCK_NUMBER
+        car['start_block_num'] = block_num
+        car['end_block_num'] = MAX_BLOCK_NUMBER
         database.insert_car(car)
 

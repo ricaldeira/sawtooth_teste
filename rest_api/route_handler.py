@@ -225,26 +225,26 @@ class RouteHandler(object):
             {'data': 'Create document transaction submitted'})
 
     async def list_cars(self, _request):
-        car_list = await self._database.fetch_all_cars_resources()
+        car_list = await self._database.fetch_all_car_resources()
         return json_response(car_list)
 
     async def create_car(self, request):
         private_key = await self._authorize(request)
 
         body = await decode_request(request)
-        required_fields = ['chassi', 'license']
+        required_fields = ['chassis', 'license']
         validate_fields(required_fields, body)
 
         await self._messenger.send_create_car_transaction(
             private_key=private_key,
             timestamp=get_time(),
-            chassi=body.get('chassi'),
-            license=body.get('licence'),
-            color=body.get('color'),
-            brand=body.get('brand'),
-            model=body.get('model'),
-            yearManufactured=body.get('yearManufactured'),
-            yearModel=body.get('yearModel')
+            chassis=body.get('chassis'),
+            license=body.get('license'),
+            color=body.get('color') if body.get('color') else None,
+            brand=body.get('brand') if body.get('brand') else None,
+            model=body.get('model') if body.get('model') else None,
+            yearManufactured=body.get('yearManufactured') if body.get('yearManufactured') else None,
+            yearModel=body.get('yearModel') if body.get('yearModel') else None
             )
 
         return json_response(

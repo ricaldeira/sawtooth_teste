@@ -22,9 +22,7 @@ from sawtooth_sdk.processor.exceptions import InvalidTransaction
 from addressing import addresser
 
 from protobufs.protos import payload_pb2
-from protobufs.protos import car_payload_pb2
 from processor.payload import SimpleSupplyPayload
-from processor.car_processor.payload import CarTrackerPayload
 from processor.state import SimpleSupplyState
 
 SYNC_TOLERANCE = 60 * 5
@@ -52,6 +50,7 @@ class SimpleSupplyHandler(TransactionHandler):
     def apply(self, transaction, context):
         header = transaction.header
         payload = SimpleSupplyPayload(transaction.payload)
+      
         state = SimpleSupplyState(context)
         try: 
             _validate_timestamp(payload.timestamp)
@@ -80,9 +79,9 @@ class SimpleSupplyHandler(TransactionHandler):
                 _create_document(
                     state=state,
                     signer_public_key=header.signer_public_key,
-                    payload=payload)
+                    payload=payload)            
             
-            elif payload.action == car_payload_pb2.CarTrackerPayload.CREATE_CAR:
+            elif payload.action == payload_pb2.SimpleSupplyPayload.CREATE_CAR:
                 LOGGER.info('[PROCESSOR HANDLER] Receiving payload of type CREATE_CAR')
                 _create_car(
                     state=state,
@@ -215,7 +214,7 @@ def _create_document(state, signer_public_key, payload):
                     timestamp=payload.timestamp)
 
 def _create_car(state, signer_public_key, payload):
-    LOGGER.debug('[PROCESSOR HANDLER] @_create_car with paylod' + payload.data)    
+    LOGGER.debug('[PROCESSOR HANDLER] @_create_car with paylod')    
     if state.get_agent(signer_public_key) is None:
         LOGGER.error('[PROCESSOR HANDLER] @_create_car:: Invalid agent')
         raise InvalidTransaction('Agent with the public key {} does '
@@ -226,7 +225,7 @@ def _create_car(state, signer_public_key, payload):
 
     state.set_car(public_key=signer_public_key,
                 timestamp=payload.timestamp,
-                chassis=payload.data.chassi, 
+                chassis=payload.data.chassis, 
                 license=payload.data.license, 
                 yearManufactured=payload.data.yearManufactured, 
                 yearModel=payload.data.yearModel,

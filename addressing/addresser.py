@@ -14,6 +14,7 @@
 # -----------------------------------------------------------------------------
 
 import enum
+import logging
 import hashlib
 from io import BytesIO
 
@@ -25,7 +26,7 @@ RECORD_PREFIX = '01'
 DOCUMENT_PREFIX = '02'
 CAR_PREFIX = '03'
 
-
+LOGGER = logging.getLogger(__name__)
 @enum.unique
 class AddressSpace(enum.IntEnum):
     AGENT = 0
@@ -58,7 +59,10 @@ def get_address_type(address):
         return AddressSpace.RECORD
     if infix == '02':
         return AddressSpace.DOCUMENT
+    if infix == '03':
+        return AddressSpace.CAR
 
+    LOGGER.error("[ADDRESSER ] Tipo de endereço não encontrado. Retornandou Outra Família")
     return AddressSpace.OTHER_FAMILY
 
 def get_document_address(document):

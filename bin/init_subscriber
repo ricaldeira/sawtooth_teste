@@ -1,3 +1,3 @@
 PYTHONPATH=/opt/teste_python python subscriber/main.py \
- init -vvv --db-name simple-supply --db-host 192.168.0.14 \
- --db-user sawtooth --db-password sawtooth
+ init -vvv --db-name docs-manager --db-host 192.168.0.14 \
+ --db-user admin --db-password admin

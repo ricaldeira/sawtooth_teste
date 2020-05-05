@@ -14,6 +14,7 @@
       <nuxt-link class="navbar-item" to="/" >Home</nuxt-link>
       <nuxt-link class="navbar-item" to="/documents" >Meus Documentos</nuxt-link>
       <nuxt-link class="navbar-item" to="/agents" >Agentes</nuxt-link>
+      <nuxt-link class="navbar-item" to="/cars" >Carros</nuxt-link>
       <nuxt-link class="navbar-item" to="/blocks" >Blockchain</nuxt-link>
      
 <!--  <a class="navbar-item">

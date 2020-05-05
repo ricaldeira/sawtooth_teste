@@ -251,7 +251,7 @@ class Database(object):
 
     async def fetch_all_car_resources(self):
         fetch_cars = """
-        SELECT  id, chassi, license, color, brand, model, yearManufactured, yearModel,
+        SELECT  id, chassis, license, color, brand, model, yearManufactured, yearModel
         FROM cars
         WHERE ({0}) >= start_block_num
         AND ({0}) < end_block_num;

@@ -30,7 +30,7 @@ export default {
   /*
   ** Global CSS
   */
- css: ["~assets/styles/main.css"],
+  css: ["~assets/styles/main.css"],
   /*
   ** Plugins to load before mounting the App
   */
@@ -42,7 +42,31 @@ export default {
   ** Nuxt.js dev-modules
   */
   buildModules: [
+  // '@nuxtjs/fontawesome',
+    ['@nuxtjs/fontawesome', {
+       component: 'fa',
+       imports: [
+        {
+          set: '@fortawesome/free-solid-svg-icons',
+          icons: ['faCog', 'faCalendar', 'faHome', 'faCircle', 'faCheck']
+        }
+      ],
+      icons: {
+        solid: true,
+        brands: [
+            'faNode',
+            'faVuejs'
+        ]
+      }      
+      //suffix: true
+    }]
   ],
+
+  // fontawesome:{
+  //   icons: {
+  //     solid: true,
+  //   }
+  // },
   /*
   ** Nuxt.js modules
   */

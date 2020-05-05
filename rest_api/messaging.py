@@ -178,7 +178,7 @@ class Messenger(object):
             raise ApiInternalError('Something went wrong. Try again later')
 
     async def send_create_car_transaction(self, private_key, timestamp,
-            chassi, license, color=None, brand=None, model=None, yearManufactured=None, yearModel=None):
+            chassis, license, color=None, brand=None, model=None, yearManufactured=None, yearModel=None):
         
         transaction_signer = self._crypto_factory.new_signer(
                 secp256k1.Secp256k1PrivateKey.from_hex(private_key)
@@ -186,7 +186,11 @@ class Messenger(object):
         batch = make_create_car_transaction(
             transaction_signer=transaction_signer,
             batch_signer=self._batch_signer,
-            timestamp=timestamp
+            timestamp=timestamp,
+            chassis=chassis, license=license, color=color, brand=brand, model=model,
+            yearManufactured=yearManufactured, yearModel=yearModel
         )
+
+        await self._send_and_wait_for_commit(batch)
 
     

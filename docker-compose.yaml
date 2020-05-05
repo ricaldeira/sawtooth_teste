@@ -14,7 +14,7 @@
       command: |
         bash -c "
           simple-supply-protogen
-          cd frontedn/
+          cd frontend/
           npm run build
           cd ../
           tail -f /dev/null
@@ -100,7 +100,7 @@
   
     validator:
       image: hyperledger/sawtooth-validator:1.2
-      container_name: sawtooth-validator
+      container_name: docs-manager-validator
       expose:
         - 4004
       ports:

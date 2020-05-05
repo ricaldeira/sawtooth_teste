@@ -15,9 +15,9 @@
             "console": "integratedTerminal",            
             "args": ["--db-host", "192.168.0.14", "-C", 
                     "tcp://192.168.0.14:4004", 
-                    "--db-name", "simple-supply",
-                    "--db-user", "sawtooth",
-                    "--db-password", "sawtooth",
+                    "--db-name", "docs-manager",
+                    "--db-user", "admin",
+                    "--db-password", "admin",
                     "-vvv"]
         }
     ]

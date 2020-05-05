@@ -113,7 +113,7 @@ CREATE TABLE IF NOT EXISTS document_owners(
 CREATE_CAR_STMTS = """
 CREATE TABLE IF NOT EXISTS cars (
     id               bigserial PRIMARY KEY,    
-    chassi      varchar,
+    chassis      varchar,
     license     varchar,
     color       varchar,
     brand       varchar,
@@ -129,7 +129,7 @@ CREATE TABLE IF NOT EXISTS cars (
 CREATE_CAR_OWNER_STMTS = """
 CREATE TABLE IF NOT EXISTS car_owners(
     id               bigserial PRIMARY KEY,
-    chassi           varchar,
+    chassis           varchar,
     agent_id         varchar,
     timestamp        bigint,
     start_block_num  bigint,
@@ -519,18 +519,18 @@ class Database(object):
     def insert_car(self, car_dict):
         update_car = """
         UPDATE cars SET end_block_num = {}
-        WHERE end_block_num = {} AND document_hash = '{}'
+        WHERE end_block_num = {} AND chassis = '{}'
         """.format(
             car_dict['start_block_num'],
             car_dict['end_block_num'],
             car_dict['chassis'])
 
-        insert_cars = """
+        insert_car = """
         INSERT INTO cars (
         chassis, license, color, brand, model, yearManufactured, yearModel,
         start_block_num,
         end_block_num)
-        VALUES ('{}', '{}', '{}', '{}', '{}');
+        VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}');
         """.format(
             car_dict['chassis'],
             car_dict['license'],

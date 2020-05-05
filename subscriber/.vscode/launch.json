@@ -12,7 +12,11 @@
             "env": {"PYTHONPATH": "/opt/teste_python"},
             "program": "main.py",
             "console": "integratedTerminal",            
-            "args": ["subscribe", "-C", "tcp://192.168.0.14:4004", "-vvv"]
+            "args": ["subscribe", "-C", "tcp://192.168.0.14:4004", 
+                "--db-name", "docs-manager",
+                "--db-user", "admin",
+                "--db-password", "admin", 
+                "-vvv"]
         }
     ]
 }
