@@ -123,6 +123,25 @@ class Database(object):
             await cursor.execute(fetch)
             return await cursor.fetchone()
 
+    async def fetch_car_resource(self, car_chassis):
+        fetch_car = """
+        SELECT chassis, license FROM cars
+        WHERE chassis='{0}'
+        AND ({1}) >= start_block_num
+        AND ({1}) < end_block_num;
+        """.format(car_chassis, LATEST_BLOCK_NUM)
+
+        # TODO: Retornar outros objetos associados
+        async with self._conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            try:
+                await cursor.execute(fetch_car)
+                car = await cursor.fetchone()
+                return car
+            except TypeError:
+                return None
+
+
+
     async def fetch_record_resource(self, record_id):
         fetch_record = """
         SELECT record_id FROM records

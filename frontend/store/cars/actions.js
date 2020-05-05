@@ -11,5 +11,18 @@ export default{
             .catch(e => {
                 context.error(e);
             })
+    },
+
+    getCarByChassi(context, chassi){
+        return this.$axios.$get('/api/cars/' + chassi)
+            .then(res => {
+                console.log("Getting CAR:::")
+                let car = {
+                    chassis: res.chassis,
+                    license: res.license                
+                }                
+                context.commit("setCar", car)                
+            })
+        
     }
 }

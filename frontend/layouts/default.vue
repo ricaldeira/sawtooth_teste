@@ -1,9 +1,11 @@
 <template>
     <div>
-            <TheHeader/>
-            <div class="container">
+            <TheHeader/>            
+            <section class="section">
+            <div class="container">                                
                 <nuxt />
-            </div>
+            </div>           
+            </section>
 
     </div>
 </template>

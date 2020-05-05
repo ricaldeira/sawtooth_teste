@@ -1,4 +1,5 @@
 export default() => ({
-    loadedCars: []
+    loadedCars: [],
+    car : Object
 
 })

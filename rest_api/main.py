@@ -108,6 +108,8 @@ def start_rest_api(host, port, messenger, database):
     app.router.add_post('/documents', handler.create_document)
     
     app.router.add_get('/cars', handler.list_cars)    
+    app.router.add_get('/cars/{car_chassis}', handler.fetch_car)
+
     app.router.add_post('/cars', handler.create_car)
 
     LOGGER.info('Starting GOODS MANAGER REST API on %s:%s', host, port)

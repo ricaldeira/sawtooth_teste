@@ -123,6 +123,16 @@ class RouteHandler(object):
                 '{} was not found'.format(record_id))
         return json_response(record)
 
+
+
+    async def fetch_car(self, request):
+        car_chassis = request.match_info.get('car_chassis', '')
+        car = await self._database.fetch_car_resource(car_chassis)
+        if car is None:
+            raise ApiNotFound('Car not found with this chassis'
+                                '{}'.format(car_chassis))
+        return json_response(car)
+
     async def transfer_record(self, request):
         private_key = await self._authorize(request)
 
