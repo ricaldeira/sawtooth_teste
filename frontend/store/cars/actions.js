@@ -24,5 +24,15 @@ export default{
                 context.commit("setCar", car)                
             })
         
+    },
+
+    async filterCars({commit}){
+
+        await commit('filterCars')
+
+    },
+    async filterSearch({commit, dispatch}, search){
+        await commit('setFilterSearch', search)
+        dispatch('filterCars')
     }
 }

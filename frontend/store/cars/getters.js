@@ -4,6 +4,9 @@ export default{
     },
     car(state){
         return state.car;
+    },
+    filteredCars(state){
+        return state.filteredCars;
     }
 
 }

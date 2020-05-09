@@ -1,5 +1,11 @@
 export default() => ({
     loadedCars: [],
-    car : Object
+    car : Object,
+    filteredCars: [],
+    filter: {
+        search: '',
+        status: 'all',
+        order: 'chassis'
+    }
 
 })

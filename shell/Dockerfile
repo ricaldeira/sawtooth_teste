@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # -----------------------------------------------------------------------------
-
+# docker build - < shell/Dockerfile
 FROM ubuntu:bionic
 
 RUN \
@@ -22,7 +22,7 @@ RUN \
  && echo 'deb [arch=amd64] http://repo.sawtooth.me/ubuntu/chime/stable bionic universe' >> /etc/apt/sources.list \
  && apt-get update
 
-RUN python3 -V
+# RUN python3 -V
 
 
 RUN apt-get install -y --allow-unauthenticated -q \
